@@ -2,14 +2,18 @@ require_relative "../pencil"
 
 RSpec.describe Pencil do
 
-myPencil = Pencil.new(100,10)
+path = "SheetOfPaper.txt"
+myPencil = Pencil.new(25, 10, path)
   describe '#initialize' do
-    context 'when creating a new pencil with a given point durability' do
-      it 'returns a new pecil with that given point durability' do
-        expect(myPencil.pointDurability).to eq 100
+    context 'when creating a new pencil' do
+      it 'returns a new pecil with given point durability' do
+        expect(myPencil.pointDurability).to eq 25
       end
-      it 'returns an blank SheetOfPaper.txt file' do
-        expect(File.read("SheetOfPaper.txt").strip).to eq ""
+      it 'returns a new pecil with given point durability' do
+        expect(myPencil.length).to eq 10
+      end
+      it 'returns a blank file' do
+        expect(File.read(path).strip).to eq ""
       end
     end
 
@@ -24,12 +28,17 @@ myPencil = Pencil.new(100,10)
     context 'when writing text to the SheetOfPaper.txt file with the pencil' do
       it 'degrades the point durability' do
         myPencil.write("Hi")
-        expect(myPencil.pointDurability).to eq 97
+        expect(myPencil.pointDurability).to eq 22
         myPencil.write(" I am a blank piece of paper")
-        expect(myPencil.pointDurability).to eq 75
+        expect(myPencil.pointDurability).to eq 0
+        myPencil.write(" Good Bye ")
+        expect(myPencil.pointDurability).to eq 0
+        expect(File.read(path).size).to eq 40
       end
-      it 'returns an blank SheetOfPaper.txt file' do
-        expect(File.read("SheetOfPaper.txt").strip).to eql "Hi I am a blank piece of paper"
+      it 'returns a letter in exchange of point durability' do
+
+        expect(File.read(path)).to eql "Hi I am a blank piece of paper          "
+
       end
     end
   end
