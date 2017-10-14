@@ -13,6 +13,6 @@ end
 newPencil = Pencil.new
 puts newPencil.pencil
 
-File.open('note.txt', 'w') do |f|
+File.open('note.txt', 'a') do |f|
   f.puts 'hello, world!'
 end
