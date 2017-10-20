@@ -92,6 +92,7 @@ myPencil = Pencil.new(25, 100, 10, path)
         myPencil.erase("I am  ")
         expect(File.read(path)).to eq "   I am a       piece of pap r          Aft r                 ready"
         expect(myPencil.eraserDurability).to eq 78
+        expect(myPencil.indexErased).to eq [10,0,46,14,7,50]
       end
     end
 

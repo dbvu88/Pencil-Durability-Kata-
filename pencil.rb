@@ -15,12 +15,13 @@ end
 
 class Pencil
 
-  attr_reader :pointDurability, :length, :filePath, :pointDegradation, :eraserDurability, :writable, :erasable
+  attr_reader :pointDurability, :length, :filePath, :pointDegradation, :eraserDurability, :writable, :erasable, :lastErasedList
 
   def initialize(durability, eraser, length, path)
     if path == nil || path.empty?
       raise MissingFilePathError
     end
+    @lastErasedList = []
 
     @eraserDurability = eraser
 
@@ -95,16 +96,16 @@ class Pencil
       raise TextNotFoundError
     end
 
-    indexLastOccurence = 0
+    i = 0
     scannedTextTotal = ""
     scannedText = ""
     # initial unscannedText is the entire text from the file
     unscannedText = text
-    # search for the last occurence of input in the text
+    # search for the last occurence of input in the text file
     while unscannedText.include? input do
       # get the index of the first occurence
       i = unscannedText.index(input)
-      
+
       # assign the scanned text & unscanned text to approriate varible
       scannedText = unscannedText[0...i+input.size]
 
@@ -112,23 +113,42 @@ class Pencil
       unscannedText = unscannedText[i+input.size...text.size]
     end
 
+    @lastErasedList << i
+
+    #erase text
+    erasedText = ""
+    input.reverse.each_char do |chr|
+      if @eraserDurability > 0
+        if chr != " "
+          @eraserDurability -= 1
+        end
+          erasedText << " "
+      elsif
+        erasedText << chr
+      end
+    end
+
     newText = scannedTextTotal[0, scannedTextTotal.size - input.size] << " " * input.size << unscannedText
 
     File.open(@filePath, 'w') do |f|
       f.print newText
     end
-    @eraserDurability -= input.gsub(/\s/,"").split("").size
   end
 
   def edit(input)
+
+    text = ""
+
+    lastErasedIndex = @lastErasedList.pop
 
     File.open(@filePath, 'r') do |f|
         text = f.read
     end
 
-    text.index("   ")
 
-
+    input.each_char do |chr|
+      text[lastErasedIndex+1]
+    end
 
   end
 
