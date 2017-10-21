@@ -135,6 +135,28 @@ class Pencil
     end
   end
 
+  def editAtLastErased(input)
+
+    text = ""
+
+    lastErasedIndex = @lastErasedList.pop
+
+    File.open(@filePath, 'r') do |f|
+        text = f.read
+    end
+
+    inputIndex = 0
+    input.each_char do |chr|
+
+      text.slice! lastErasedIndex += 1
+      text.insert lastErasedIndex, input[inputIndex]
+      inputIndex += 1
+    end
+
+    puts text
+
+  end
+  #look for whitespace and override it
   def edit(input)
 
     text = ""
@@ -145,10 +167,15 @@ class Pencil
         text = f.read
     end
 
-
+    inputIndex = 0
     input.each_char do |chr|
-      text[lastErasedIndex+1]
+
+      text.slice! lastErasedIndex += 1
+      text.insert lastErasedIndex, input[inputIndex]
+      inputIndex += 1
     end
+
+    puts text
 
   end
 
